@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#0f766e">
+<title>いい街こまつプレミアム 取扱店検索</title>
+<style>
+:root{--bg:#f5f7f7;--card:#fff;--ink:#172023;--muted:#66757a;--accent:#0f766e;--line:#dce5e3}
+*{box-sizing:border-box} body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Hiragino Sans","Yu Gothic",sans-serif;background:var(--bg);color:var(--ink)}
+header{background:linear-gradient(135deg,#0f766e,#155e75);color:#fff;padding:34px 18px 28px}
+.wrap{max-width:920px;margin:auto}.eyebrow{font-size:13px;opacity:.86;font-weight:700;letter-spacing:.08em}
+h1{font-size:clamp(26px,6vw,42px);line-height:1.15;margin:8px 0 10px}.lead{margin:0;opacity:.92}
+.searchbox{margin-top:-18px;background:#fff;border-radius:18px;padding:16px;box-shadow:0 10px 30px #00000014}
+.controls{display:grid;grid-template-columns:1fr 220px;gap:10px}
+input,select{width:100%;font-size:16px;padding:14px 15px;border:1px solid var(--line);border-radius:12px;background:#fff;color:var(--ink);outline:none}
+input:focus,select:focus{border-color:var(--accent);box-shadow:0 0 0 3px #0f766e18}
+.meta{display:flex;justify-content:space-between;gap:12px;align-items:center;margin:16px 2px 10px;color:var(--muted);font-size:14px}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;padding-bottom:28px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;box-shadow:0 2px 10px #00000008}
+.name{font-size:18px;font-weight:800;margin:0 0 8px}.tag{display:inline-block;font-size:12px;font-weight:700;background:#e7f4f1;color:#0f5d55;border-radius:999px;padding:5px 9px;margin-bottom:10px}
+.addr{font-size:14px;color:var(--muted);line-height:1.6}.facility{font-size:12px;color:#7a8588;margin-top:5px}
+.actions{margin-top:13px;display:flex;gap:8px}.btn{display:inline-block;text-decoration:none;border-radius:10px;padding:9px 11px;font-size:13px;font-weight:800}
+.map{background:var(--accent);color:white}.copy{border:1px solid var(--line);background:#fff;color:var(--ink);cursor:pointer}
+.notice{background:#fff7df;border:1px solid #f1df9b;border-radius:14px;padding:14px 16px;line-height:1.65;font-size:13px;margin:0 0 24px}
+footer{padding:22px 18px 35px;color:var(--muted);font-size:12px;text-align:center}.empty{text-align:center;background:#fff;border:1px dashed var(--line);border-radius:16px;padding:40px;color:var(--muted);grid-column:1/-1}
+@media(max-width:650px){.controls{grid-template-columns:1fr}.grid{grid-template-columns:1fr}header{padding-top:26px}.searchbox{border-radius:15px}}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+  <div class="eyebrow">KOMATSU SHOP SEARCH / PROTOTYPE</div>
+  <h1>いい街こまつプレミアム<br>取扱店検索</h1>
+  <p class="lead">店名・住所・業種から、スマホですぐ検索できます。</p>
+</div></header>
+
+<main class="wrap" style="padding:0 16px">
+  <section class="searchbox">
+    <div class="controls">
+      <input id="q" type="search" placeholder="例：安宅、焼肉、龍助町、薬局" autocomplete="off">
+      <select id="category"><option value="">すべての業種</option></select>
+    </div>
+  </section>
+  <div class="meta"><span id="count">読み込み中…</span><button class="copy" id="clear">条件をクリア</button></div>
+  <section class="grid" id="results"></section>
+
+  <div class="notice">
+    <strong>ご注意</strong><br>
+    このページは、GitHub Pages公開を体験するための試作版です。掲載元は小松市「いい街こまつプレミアム」取扱店一覧（令和8年5月18日時点）です。
+    取扱店は随時更新されるため、実際の利用前には小松市公式の最新情報をご確認ください。
+    この試作版の店舗データは公開PDFから抽出した一部を収録しており、公式の全取扱店を網羅するものではありません。
+  </div>
+</main>
+<footer>Data source: 小松市公開資料 / Prototype for GitHub Pages</footer>
+
+<script>
+let shops=[];
+const q=document.querySelector('#q'), cat=document.querySelector('#category'), results=document.querySelector('#results'), count=document.querySelector('#count');
+const norm=s=>(s||'').toString().normalize('NFKC').toLowerCase().replace(/\s+/g,'');
+function mapUrl(s){return 'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent('石川県小松市 '+s.address+' '+s.name)}
+function render(){
+  const keyword=norm(q.value), c=cat.value;
+  const filtered=shops.filter(s=>{
+    const hay=norm([s.name,s.address,s.category,s.facility||''].join(' '));
+    return (!keyword||hay.includes(keyword))&&(!c||s.category===c);
+  });
+  count.textContent=`${filtered.length}件を表示 / 収録 ${shops.length}件`;
+  results.innerHTML=filtered.length?filtered.map(s=>`
+    <article class="card">
+      <div class="tag">${esc(s.category)}</div>
+      <h2 class="name">${esc(s.name)}</h2>
+      <div class="addr">〒 石川県小松市 ${esc(s.address)}</div>
+      ${s.facility?`<div class="facility">${esc(s.facility)} 内</div>`:''}
+      <div class="actions">
+        <a class="btn map" target="_blank" rel="noopener" href="${mapUrl(s)}">Googleマップ</a>
+      </div>
+    </article>`).join(''):'<div class="empty">該当するお店が見つかりませんでした。</div>';
+}
+function esc(v){return String(v).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
+fetch('./shops.json').then(r=>r.json()).then(data=>{
+  shops=data;
+  [...new Set(shops.map(s=>s.category))].sort((a,b)=>a.localeCompare(b,'ja')).forEach(c=>{
+    const o=document.createElement('option');o.value=c;o.textContent=c;cat.appendChild(o);
+  });
+  render();
+}).catch(()=>{count.textContent='データを読み込めませんでした';});
+q.addEventListener('input',render); cat.addEventListener('change',render);
+document.querySelector('#clear').addEventListener('click',()=>{q.value='';cat.value='';render();q.focus();});
+</script>
+</body></html>
