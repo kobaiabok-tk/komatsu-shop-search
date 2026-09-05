@@ -2,89 +2,190 @@
 <html lang="ja">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#0f766e">
-<title>いい街こまつプレミアム 取扱店検索</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>KOMATSU SHOP SEARCH</title>
+<meta name="description" content="小松市のショップを、店名・住所・カテゴリから検索できる非公式検索サイトです。">
 <style>
-:root{--bg:#f5f7f7;--card:#fff;--ink:#172023;--muted:#66757a;--accent:#0f766e;--line:#dce5e3}
-*{box-sizing:border-box} body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Hiragino Sans","Yu Gothic",sans-serif;background:var(--bg);color:var(--ink)}
-header{background:linear-gradient(135deg,#0f766e,#155e75);color:#fff;padding:34px 18px 28px}
-.wrap{max-width:920px;margin:auto}.eyebrow{font-size:13px;opacity:.86;font-weight:700;letter-spacing:.08em}
-h1{font-size:clamp(26px,6vw,42px);line-height:1.15;margin:8px 0 10px}.lead{margin:0;opacity:.92}
-.searchbox{margin-top:-18px;background:#fff;border-radius:18px;padding:16px;box-shadow:0 10px 30px #00000014}
-.controls{display:grid;grid-template-columns:1fr 220px;gap:10px}
-input,select{width:100%;font-size:16px;padding:14px 15px;border:1px solid var(--line);border-radius:12px;background:#fff;color:var(--ink);outline:none}
-input:focus,select:focus{border-color:var(--accent);box-shadow:0 0 0 3px #0f766e18}
-.meta{display:flex;justify-content:space-between;gap:12px;align-items:center;margin:16px 2px 10px;color:var(--muted);font-size:14px}
-.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;padding-bottom:28px}
-.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;box-shadow:0 2px 10px #00000008}
-.name{font-size:18px;font-weight:800;margin:0 0 8px}.tag{display:inline-block;font-size:12px;font-weight:700;background:#e7f4f1;color:#0f5d55;border-radius:999px;padding:5px 9px;margin-bottom:10px}
-.addr{font-size:14px;color:var(--muted);line-height:1.6}.facility{font-size:12px;color:#7a8588;margin-top:5px}
-.actions{margin-top:13px;display:flex;gap:8px}.btn{display:inline-block;text-decoration:none;border-radius:10px;padding:9px 11px;font-size:13px;font-weight:800}
-.map{background:var(--accent);color:white}.copy{border:1px solid var(--line);background:#fff;color:var(--ink);cursor:pointer}
-.notice{background:#fff7df;border:1px solid #f1df9b;border-radius:14px;padding:14px 16px;line-height:1.65;font-size:13px;margin:0 0 24px}
-footer{padding:22px 18px 35px;color:var(--muted);font-size:12px;text-align:center}.empty{text-align:center;background:#fff;border:1px dashed var(--line);border-radius:16px;padding:40px;color:var(--muted);grid-column:1/-1}
-@media(max-width:650px){.controls{grid-template-columns:1fr}.grid{grid-template-columns:1fr}header{padding-top:26px}.searchbox{border-radius:15px}}
+:root{
+  --black:#111; --gray:#777; --line:#e7e7e7; --soft:#f6f6f6; --white:#fff;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Hiragino Kaku Gothic ProN","Yu Gothic",Meiryo,sans-serif;color:var(--black);background:#fff}
+a{color:inherit;text-decoration:none}
+header{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.96);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.header-inner{max-width:1240px;margin:auto;height:68px;display:flex;align-items:center;gap:28px;padding:0 22px}
+.logo{font-weight:800;letter-spacing:.18em;font-size:19px;white-space:nowrap}
+.logo span{display:block;font-size:9px;letter-spacing:.28em;margin-top:2px}
+nav{display:flex;gap:24px;font-size:13px;font-weight:700;margin-left:20px}
+.hero{background:#111;color:white}
+.hero-wrap{max-width:1240px;margin:auto;padding:58px 22px 44px;display:grid;grid-template-columns:1.1fr .9fr;gap:42px;align-items:center}
+.hero h1{font-size:clamp(38px,6vw,78px);line-height:.95;letter-spacing:.04em;margin:0 0 22px}
+.hero p{font-size:17px;line-height:1.9;color:#ddd;margin:0 0 28px}
+.hero-img{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:4px;filter:saturate(.85) contrast(1.02)}
+.searchbar{display:flex;background:#fff;border-radius:999px;padding:6px;max-width:720px;box-shadow:0 8px 30px rgba(0,0,0,.16)}
+.searchbar input{flex:1;border:0;outline:0;font-size:16px;padding:15px 20px;background:transparent}
+.searchbar button{border:0;border-radius:999px;background:#111;color:#fff;padding:0 28px;font-weight:700;cursor:pointer}
+main{max-width:1240px;margin:auto;padding:34px 22px 70px}
+.quick{display:grid;grid-template-columns:repeat(8,1fr);gap:12px;margin:4px 0 42px}
+.quick button{border:0;background:#fff;cursor:pointer;padding:12px 5px;font-size:12px}
+.quick .icon{width:54px;height:54px;border-radius:50%;background:var(--soft);display:grid;place-items:center;margin:0 auto 8px;font-size:23px;border:1px solid var(--line)}
+.section-head{display:flex;justify-content:space-between;align-items:end;margin:35px 0 18px}
+.section-head h2{font-size:26px;margin:0}
+.count{font-size:13px;color:var(--gray)}
+.feature-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:44px}
+.feature{min-height:200px;background:linear-gradient(135deg,#161616,#383838);color:#fff;padding:24px;display:flex;flex-direction:column;justify-content:end}
+.feature:nth-child(2){background:linear-gradient(135deg,#3b3b3b,#777)}
+.feature:nth-child(3){background:linear-gradient(135deg,#222,#555)}
+.feature small{opacity:.7}.feature strong{font-size:24px;margin-top:6px}
+.filter-row{display:flex;gap:10px;margin:0 0 22px;flex-wrap:wrap}
+select,.filter-input{border:1px solid var(--line);background:#fff;border-radius:2px;padding:13px 14px;font-size:14px}
+.filter-input{min-width:260px;flex:1}
+.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:28px 16px}
+.card{border-top:1px solid var(--line);padding-top:14px;min-height:165px}
+.card .tag{display:inline-block;font-size:11px;background:#f2f2f2;padding:5px 8px;border-radius:999px;margin-bottom:10px}
+.card h3{font-size:16px;line-height:1.45;margin:0 0 8px}
+.card .addr{font-size:12px;color:#666;line-height:1.7}
+.card .facility{font-size:11px;color:#999;margin-top:8px}
+.card-actions{display:flex;gap:8px;margin-top:12px}
+.card-actions a{font-size:12px;border:1px solid var(--line);padding:7px 10px;border-radius:2px}
+.loadmore{display:block;margin:40px auto 0;border:1px solid #111;background:#fff;padding:14px 38px;font-weight:700;cursor:pointer}
+.notice{margin-top:60px;border-top:1px solid var(--line);padding-top:22px;font-size:12px;color:#777;line-height:1.8}
+footer{background:#111;color:#aaa;text-align:center;padding:30px;font-size:11px}
+@media(max-width:900px){
+  nav{display:none}.hero-wrap{grid-template-columns:1fr;padding-top:38px}.hero-img{display:none}
+  .quick{grid-template-columns:repeat(4,1fr)}
+  .feature-grid{grid-template-columns:1fr}
+  .cards{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:560px){
+  .header-inner{height:60px}.logo{font-size:15px}
+  .hero h1{font-size:44px}.hero p{font-size:14px}.searchbar input{font-size:14px;padding:13px}
+  .searchbar button{padding:0 19px}
+  .quick{grid-template-columns:repeat(4,1fr);gap:2px}.quick .icon{width:46px;height:46px}
+  .cards{grid-template-columns:1fr}.section-head h2{font-size:22px}
+}
 </style>
 </head>
 <body>
-<header><div class="wrap">
-  <div class="eyebrow">KOMATSU SHOP SEARCH</div>
-  <h1>いい街こまつプレミアム<br>取扱店検索</h1>
-  <p class="lead">店名・住所・業種から、スマホですぐ検索できます。</p>
-</div></header>
+<header>
+ <div class="header-inner">
+  <a href="#" class="logo">KOMATSU<span>SHOP SEARCH</span></a>
+  <nav>
+   <a href="#shops">ショップを探す</a>
+   <a href="#category">カテゴリから探す</a>
+   <a href="#about">このサイトについて</a>
+  </nav>
+ </div>
+</header>
 
-<main class="wrap" style="padding:0 16px">
-  <section class="searchbox">
-    <div class="controls">
-      <input id="q" type="search" placeholder="例：安宅、焼肉、龍助町、薬局" autocomplete="off">
-      <select id="category"><option value="">すべての業種</option></select>
-    </div>
-  </section>
-  <div class="meta"><span id="count">読み込み中…</span><button class="copy" id="clear">条件をクリア</button></div>
-  <section class="grid" id="results"></section>
-
-  <div class="notice">
-    <strong>ご注意</strong><br>
-    掲載元は小松市「いい街こまつプレミアム」取扱店一覧（令和8年5月18日時点）です。
-    取扱店は随時更新されるため、実際の利用前には小松市公式の最新情報をご確認ください。
-    
+<section class="hero">
+ <div class="hero-wrap">
+  <div>
+   <h1>KOMATSU<br>SHOP SEARCH</h1>
+   <p>小松市の「行きたい」「知りたい」「見つけたい」を、もっとシンプルに。<br>店名・住所・カテゴリからすぐ検索できます。</p>
+   <div class="searchbar">
+    <input id="heroSearch" placeholder="キーワードで検索（例：カフェ、ラーメン、衣料品）">
+    <button onclick="applyHeroSearch()">検索</button>
+   </div>
   </div>
+  <img src="hero.png" class="hero-img" alt="KOMATSU SHOP SEARCH イメージ">
+ </div>
+</section>
+
+<main>
+ <section id="category" class="quick">
+  <button data-cat="飲食"><div class="icon">🍽</div>グルメ</button>
+  <button data-cat="衣料品"><div class="icon">👕</div>ファッション</button>
+  <button data-cat="各種食料品"><div class="icon">🛒</div>食品</button>
+  <button data-cat="医薬品"><div class="icon">💊</div>ドラッグ</button>
+  <button data-cat="理容"><div class="icon">✂️</div>美容</button>
+  <button data-cat="家具"><div class="icon">🛋</div>暮らし</button>
+  <button data-cat="旅館"><div class="icon">🏨</div>宿泊</button>
+  <button data-cat=""><div class="icon">•••</div>すべて</button>
+ </section>
+
+ <div class="section-head"><h2>ピックアップ</h2></div>
+ <section class="feature-grid">
+  <div class="feature"><small>SHOPPING MALL</small><strong>イオンモール新小松</strong></div>
+  <div class="feature"><small>SHOPPING MALL</small><strong>アル・プラザ小松</strong></div>
+  <div class="feature"><small>KOMATSU CITY</small><strong>街で見つける、小松の店。</strong></div>
+ </section>
+
+ <section id="shops">
+  <div class="section-head">
+   <h2>ショップを探す</h2>
+   <div class="count" id="count"></div>
+  </div>
+  <div class="filter-row">
+   <input id="q" class="filter-input" placeholder="店名・住所・カテゴリ・施設名で検索">
+   <select id="cat"><option value="">すべてのカテゴリ</option></select>
+  </div>
+  <div id="cards" class="cards"></div>
+  <button id="more" class="loadmore">もっと見る</button>
+ </section>
+
+ <div id="about" class="notice">
+  本サイトは小松市公開資料をもとに作成した検索用ページです。最新の取扱状況・営業情報は各店舗または小松市の公式情報をご確認ください。
+  Google Mapsへのリンクは住所検索を利用しています。
+ </div>
 </main>
-<footer>Data source: 小松市公開資料（令和8年5月18日時点）</footer>
+<footer>© KOMATSU SHOP SEARCH</footer>
 
 <script>
-let shops=[];
-const q=document.querySelector('#q'), cat=document.querySelector('#category'), results=document.querySelector('#results'), count=document.querySelector('#count');
-const norm=s=>(s||'').toString().normalize('NFKC').toLowerCase().replace(/\s+/g,'');
-function mapUrl(s){return 'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent('石川県小松市 '+s.address+' '+s.name)}
-function render(){
-  const keyword=norm(q.value), c=cat.value;
-  const filtered=shops.filter(s=>{
-    const hay=norm([s.name,s.address,s.category,s.facility||''].join(' '));
-    return (!keyword||hay.includes(keyword))&&(!c||s.category===c);
+let shops=[], filtered=[], shown=0;
+const STEP=48;
+const cards=document.getElementById('cards'), count=document.getElementById('count');
+const q=document.getElementById('q'), cat=document.getElementById('cat');
+
+function esc(s=''){return s.replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
+function render(reset=true){
+  const query=q.value.trim().toLowerCase(), c=cat.value;
+  filtered=shops.filter(s=>{
+    const hay=[s.name,s.address,s.category,s.facility||''].join(' ').toLowerCase();
+    return (!query||hay.includes(query)) && (!c||s.category===c);
   });
-  count.textContent=`${filtered.length}件を表示 / 収録 ${shops.length}件`;
-  results.innerHTML=filtered.length?filtered.map(s=>`
-    <article class="card">
-      <div class="tag">${esc(s.category)}</div>
-      <h2 class="name">${esc(s.name)}</h2>
-      <div class="addr">〒 石川県小松市 ${esc(s.address)}</div>
-      ${s.facility?`<div class="facility">${esc(s.facility)} 内</div>`:''}
-      <div class="actions">
-        <a class="btn map" target="_blank" rel="noopener" href="${mapUrl(s)}">Googleマップ</a>
-      </div>
-    </article>`).join(''):'<div class="empty">該当するお店が見つかりませんでした。</div>';
+  if(reset){shown=0;cards.innerHTML=''}
+  const next=filtered.slice(shown, shown+STEP);
+  cards.insertAdjacentHTML('beforeend',next.map(s=>`
+   <article class="card">
+    <div class="tag">${esc(s.category)}</div>
+    <h3>${esc(s.name)}</h3>
+    <div class="addr">📍 ${esc(s.address)}</div>
+    ${s.facility?`<div class="facility">${esc(s.facility)}</div>`:''}
+    <div class="card-actions">
+     <a target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent('石川県小松市 '+s.address+' '+s.name)}">地図を見る ↗</a>
+    </div>
+   </article>`).join(''));
+  shown+=next.length;
+  count.textContent=`${filtered.length} SHOP${filtered.length===1?'':'S'}`;
+  document.getElementById('more').style.display=shown<filtered.length?'block':'none';
 }
-function esc(v){return String(v).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
-fetch('./shops.json').then(r=>r.json()).then(data=>{
+function applyHeroSearch(){
+  q.value=document.getElementById('heroSearch').value;
+  document.getElementById('shops').scrollIntoView({behavior:'smooth'});
+  render(true);
+}
+fetch('shops.json').then(r=>r.json()).then(data=>{
   shops=data;
-  [...new Set(shops.map(s=>s.category))].sort((a,b)=>a.localeCompare(b,'ja')).forEach(c=>{
+  [...new Set(shops.map(x=>x.category))].sort().forEach(c=>{
     const o=document.createElement('option');o.value=c;o.textContent=c;cat.appendChild(o);
   });
-  render();
-}).catch(()=>{count.textContent='データを読み込めませんでした';});
-q.addEventListener('input',render); cat.addEventListener('change',render);
-document.querySelector('#clear').addEventListener('click',()=>{q.value='';cat.value='';render();q.focus();});
+  render(true);
+});
+q.addEventListener('input',()=>render(true));
+cat.addEventListener('change',()=>render(true));
+document.getElementById('more').addEventListener('click',()=>render(false));
+document.querySelectorAll('.quick button').forEach(b=>b.addEventListener('click',()=>{
+  const key=b.dataset.cat;
+  if(!key){cat.value='';q.value='';}
+  else{
+    const found=[...cat.options].find(o=>o.value.includes(key));
+    if(found)cat.value=found.value; else {cat.value='';q.value=key}
+  }
+  document.getElementById('shops').scrollIntoView({behavior:'smooth'});
+  render(true);
+}));
+document.getElementById('heroSearch').addEventListener('keydown',e=>{if(e.key==='Enter')applyHeroSearch()});
 </script>
-</body></html>
+</body>
+</html>
